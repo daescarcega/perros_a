@@ -10,6 +10,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import edu.itesm.prros.adapter.PerrosAdapter
 import edu.itesm.prros.databinding.ActivityMainBinding
+import edu.itesm.prros.patterns.RetrofitSingleton
+import edu.itesm.prros.patterns.RetrofitSingleton.getRetroFit
 import edu.itesm.prros.response.PerroResponse
 import edu.itesm.prros.service.PerrosAPIService
 import kotlinx.coroutines.CoroutineScope
@@ -37,19 +39,14 @@ class MainActivity : AppCompatActivity(),
         //buscarPerrosPorRaza("labrador")
         binding.busqueda.setOnQueryTextListener(this)
     }
-    private  fun getRetroFit():Retrofit{
-        return Retrofit.Builder()
-            .baseUrl("https://dog.ceo/api/breed/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
+
     private fun hideKeyboard() {
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
     private fun buscarPerrosPorRaza(raza : String) {
         CoroutineScope(Dispatchers.IO).launch {
-            val llamado = getRetroFit()
+            val llamado = RetrofitSingleton.getRetroFit()
                 .create(PerrosAPIService::class.java)
                 .getPerrosPorRaza("$raza/images")
             val perrosResponse : PerroResponse? = llamado.body()
