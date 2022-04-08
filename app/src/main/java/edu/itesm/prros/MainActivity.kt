@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity(),
         setContentView(binding.root)
         initAdapter()
         initViewModel()
+        print("MVVM done")
     }
     private fun initViewModel(){
         viewModel = ViewModelProvider(this).get(ListaPerrosViewModel::class.java)
