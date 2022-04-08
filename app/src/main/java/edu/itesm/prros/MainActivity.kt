@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity(),
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
+    /*
     private fun buscarPerrosPorRaza(raza : String) {
         CoroutineScope(Dispatchers.IO).launch {
             val llamado = RetrofitSingleton.getRetroFit()
@@ -68,9 +69,11 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
+     */
+
     override fun onQueryTextSubmit(searchString: String?): Boolean {
         if(!searchString.isNullOrEmpty()){
-            buscarPerrosPorRaza(searchString.lowercase())
+            //buscarPerrosPorRaza(searchString.lowercase())
         }
         return true
     }
