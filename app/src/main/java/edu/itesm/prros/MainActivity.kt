@@ -63,10 +63,17 @@ class MainActivity : AppCompatActivity(),
     override fun onQueryTextSubmit(searchString: String?): Boolean {
         if(!searchString.isNullOrEmpty()){
             //buscarPerrosPorRaza(searchString.lowercase())
+            consultaPerros(searchString)
         }
         return true
     }
 
+    fun  consultaPerros(searchString: String?){
+        if(   !searchString.isNullOrEmpty()) {
+            viewModel.perroAPICall(searchString)
+            hideKeyboard()
+        }
+    }
     override fun onQueryTextChange(p0: String?): Boolean {
         return true
     }
