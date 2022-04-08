@@ -7,9 +7,12 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Adapter
 import android.widget.SearchView.OnQueryTextListener
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import edu.itesm.prros.adapter.PerrosAdapter
 import edu.itesm.prros.databinding.ActivityMainBinding
+import edu.itesm.prros.mvvm.ListaPerrosViewModel
 import edu.itesm.prros.patterns.RetrofitSingleton
 import edu.itesm.prros.patterns.RetrofitSingleton.getRetroFit
 import edu.itesm.prros.response.PerroResponse
@@ -24,6 +27,7 @@ class MainActivity : AppCompatActivity(),
     android.widget.SearchView.OnQueryTextListener {
     private lateinit var adapter: PerrosAdapter
     private lateinit var binding: ActivityMainBinding
+    private  lateinit var viewModel: ListaPerrosViewModel
     private val perrosPics = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +35,16 @@ class MainActivity : AppCompatActivity(),
         binding =  ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initAdapter()
+        initViewModel()
+    }
+    private fun initViewModel(){
+        viewModel = ViewModelProvider(this).get(ListaPerrosViewModel::class.java)
+        viewModel.getLiveDataObserver().observe(this, Observer {
+            if (!it.isEmpty()){
+                adapter.setImagenes(it)
+                adapter.notifyDataSetChanged()
+            }
+        })
     }
     private fun initAdapter(){
         adapter = PerrosAdapter(perrosPics)
@@ -44,32 +58,7 @@ class MainActivity : AppCompatActivity(),
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
-    /*
-    private fun buscarPerrosPorRaza(raza : String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val llamado = RetrofitSingleton.getRetroFit()
-                .create(PerrosAPIService::class.java)
-                .getPerrosPorRaza("$raza/images")
-            val perrosResponse : PerroResponse? = llamado.body()
-           runOnUiThread {
-               if (llamado.isSuccessful) {
-                   val imagenes: List<String> = perrosResponse?.images ?: emptyList()
-                   perrosPics.clear()
-                   perrosPics.addAll(imagenes)
-                   adapter.notifyDataSetChanged()
-               } else {
-                   Toast.makeText(
-                       this@MainActivity, "Error",
-                       Toast.LENGTH_LONG
-                   ).show()
-               }
-               hideKeyboard()
-           }
 
-        }
-    }
-
-     */
 
     override fun onQueryTextSubmit(searchString: String?): Boolean {
         if(!searchString.isNullOrEmpty()){

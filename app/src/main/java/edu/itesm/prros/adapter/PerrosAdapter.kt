@@ -5,8 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import edu.itesm.prros.R
 
-class PerrosAdapter(private val imagenes : List<String>) :
+class PerrosAdapter(private var imagenes : List<String>) :
     RecyclerView.Adapter<PerroViewHolder>() {
+
+    fun setImagenes(imags: List<String>){
+        imagenes = imags
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PerroViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return PerroViewHolder(layoutInflater.inflate(R.layout.perro_renglon,
