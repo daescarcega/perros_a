@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity(),
             if (!it.isEmpty()){
                 adapter.setImagenes(it)
                 adapter.notifyDataSetChanged()
+                print("This is done")
             }
         })
     }
